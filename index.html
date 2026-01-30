@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 Game Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>24 Game Challenge</h1>
+            <p>Make 24 using all four cards and basic math (+ - * / ()).</p>
+        </header>
+
+        <main class="game-board">
+            <div class="timer-container">
+                <div class="timer-ring-bg"></div>
+                <div class="timer-ring-fill" id="timer-ring"></div>
+                <span id="timer-text">60</span>
+            </div>
+
+            <div class="cards-container" id="cards-container">
+                <!-- Cards will be injected here -->
+                <div class="card skeleton"></div>
+                <div class="card skeleton"></div>
+                <div class="card skeleton"></div>
+                <div class="card skeleton"></div>
+            </div>
+
+            <div class="controls-container">
+                <input type="text" id="solution-input" placeholder="Enter solution (e.g. 4 * 6 * 1 * 1)" autocomplete="off">
+                <button id="submit-btn" class="primary-btn">Submit</button>
+            </div>
+
+            <div class="message-area" id="message-area">
+                <!-- Messages go here -->
+            </div>
+            
+            <div class="secondary-controls">
+                <button id="give-up-btn" class="secondary-btn">Give Up / Show Solution</button>
+                <button id="new-game-btn" class="secondary-btn">Skip / New Round</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
