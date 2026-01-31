@@ -52,7 +52,7 @@ function init() {
 
 function setupEventListeners() {
     newGameBtn.addEventListener('click', startNewRound);
-    giveUpBtn.addEventListener('click', () => showSolution());
+    giveUpBtn.addEventListener('click', handleGiveUp);
     cancelMergeBtn.addEventListener('click', closeModal);
 
     opButtons.forEach(btn => {
@@ -449,6 +449,12 @@ function checkWinCondition() {
             // Don't end round, let them undo
         }
     }
+}
+
+function handleGiveUp() {
+    if (!isGameActive) return;
+    endRound(false, "You gave up.");
+    showSolution();
 }
 
 function endRound(success, message) {
