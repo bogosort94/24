@@ -84,7 +84,8 @@ header p {
     z-index: 2;
 }
 
-.timer-ring-bg, .timer-ring-fill {
+.timer-ring-bg,
+.timer-ring-fill {
     position: absolute;
     top: 0;
     left: 0;
@@ -101,7 +102,8 @@ header p {
 .timer-ring-fill {
     border-top-color: var(--accent-secondary);
     border-right-color: var(--accent-primary);
-    transform: rotate(-45deg); /* Start from top */
+    transform: rotate(-45deg);
+    /* Start from top */
     transition: all 1s linear;
 }
 
@@ -115,6 +117,7 @@ header p {
     flex-wrap: wrap;
 }
 
+/* Draggable Cards */
 .card {
     width: 80px;
     height: 120px;
@@ -129,12 +132,39 @@ header p {
     font-size: 1.5rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     user-select: none;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: deal 0.5s ease-out backwards;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+
+    cursor: grab;
+    touch-action: none;
+    /* Important for touch drag */
+    position: relative;
+    z-index: 1;
 }
 
-.card:hover {
-    transform: translateY(-10px) rotate(2deg);
+.card:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 100;
+}
+
+/* Merged Card Style */
+.card.merged {
+    background: #f1f5f9;
+    border: 2px solid var(--accent-primary);
+}
+
+.card.merged .card-top,
+.card.merged .card-bottom {
+    opacity: 0;
+    /* Hide suit/rank for calculated numbers */
+}
+
+/* Ghost Card (Drop Target Placeholder if needed) */
+.card.ghost {
+    opacity: 0.5;
+    background: #cbd5e1;
+    border: 2px dashed #94a3b8;
 }
 
 .card.red {
@@ -161,25 +191,13 @@ header p {
 
 .card-bottom {
     font-size: 1rem;
-    text-align: right;
+    text-align: left;
     transform: rotate(180deg);
 }
 
-@keyframes deal {
-    from {
-        opacity: 0;
-        transform: translateY(50px) scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
 
-.card:nth-child(1) { animation-delay: 0.1s; }
-.card:nth-child(2) { animation-delay: 0.2s; }
-.card:nth-child(3) { animation-delay: 0.3s; }
-.card:nth-child(4) { animation-delay: 0.4s; }
+
+
 
 /* Input */
 .controls-container {
@@ -221,6 +239,149 @@ header p {
     transform: scale(0.95);
 }
 
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    /* Slightly more transparent */
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* Ensure top-most, above dragged cards (1000) */
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.roulette-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    /* Circular layout guide */
+}
+
+/* Common button styles */
+.op-btn,
+.roulette-center {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.op-btn {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    gap: 2px;
+}
+
+.op-symbol {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.op-result {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.op-btn:hover .op-result {
+    color: white;
+}
+
+.op-btn:hover {
+    background: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.op-btn:active {
+    transform: scale(0.95);
+}
+
+/* Positions */
+#op-add {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#op-add:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+#op-sub {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+#op-sub:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+#op-mul {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#op-mul:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+#op-div {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+#op-div:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Center Cancel Button */
+.roulette-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: #ef4444;
+    /* Red for cancel */
+    color: white;
+    font-size: 1.2rem;
+}
+
+.roulette-center:hover {
+    background: #dc2626;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.roulette-center:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
 /* Messages */
 .message-area {
     min-height: 1.5rem;
@@ -228,9 +389,17 @@ header p {
     font-weight: 600;
 }
 
-.message-success { color: var(--accent-success); }
-.message-error { color: var(--accent-error); }
-.message-info { color: var(--text-secondary); }
+.message-success {
+    color: var(--accent-success);
+}
+
+.message-error {
+    color: var(--accent-error);
+}
+
+.message-info {
+    color: var(--text-secondary);
+}
 
 /* Secondary Controls */
 .secondary-controls {
