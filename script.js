@@ -499,50 +499,7 @@ function showSolution() {
     messageArea.appendChild(div);
 }
 
-// Reuse Solver 
-function solve24(nums) {
-    if (nums.length < 1) return null;
-    if (nums.length === 1) return Math.abs(nums[0] - 24) < 0.001 ? nums[0] : null;
 
-    // Basic DFS Solver for N numbers
-    // This is more complex than 4 numbers fixed. 
-    // Since we only need it for the hint on deal (4 cards), existing solver logic is fine.
-    // If user asks for solution mid-game (e.g. 2 cards left), we can use a simpler recursive solver.
-
-    const results = solveRecursive(nums);
-    return results.length > 0 ? results[0] : null;
-}
-
-function solveRecursive(nums) {
-    if (nums.length === 1) {
-        if (Math.abs(nums[0] - 24) < 0.001) return [nums[0].toString()];
-        return [];
-    }
-
-    let solutions = [];
-    for (let i = 0; i < nums.length; i++) {
-        for (let j = 0; j < nums.length; j++) {
-            if (i === j) continue;
-
-            const list = [];
-            for (let k = 0; k < nums.length; k++) {
-                if (k !== i && k !== j) list.push(nums[k]);
-            }
-
-            const a = nums[i];
-            const b = nums[j];
-
-            // Operations
-            // we will carry strings to track expression? 
-            // It gets complex passing strings. Let's just return true if solvable for simplicity in this artifact?
-            // The user just wants to see A solution.
-
-            // Re-implementing a simple expression tracked solver
-            // Note: simple solver doesn't handle parentheses perfectly for display without care
-        }
-    }
-    return []; // For now, stubbing precise solution for N!=4
-}
 
 // Restoring the original brute force for 4 cards for the initial deal check
 function getPermutations(arr) {
